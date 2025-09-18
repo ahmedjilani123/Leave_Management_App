@@ -1,0 +1,50 @@
+{
+  "name": "Leave_Management_App",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^8",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@cap-js/cds-types": "^0.7.0"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "model": "db",
+        "credentials": {
+          "database": ":memory:"
+        }
+      },
+      "auth":{
+        "kind": "mocked",
+        "users":{
+          "admin": {
+            "id":"admin@gmail.com",
+            "password": "admin",
+            "roles": ["admin"]
+          },
+          "user": {
+            "id":"user@gmail.com",
+            "password": "user",
+            "roles": ["User"]
+          },
+          "user2": {
+             "id":"user@gmail.com",
+            "password": "user2",
+            "roles": ["User"]
+          }
+        }
+      }
+    }
+  }
+}
