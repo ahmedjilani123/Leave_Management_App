@@ -6,30 +6,19 @@ module.exports = async (srv) => {
    const user = req.user.id;
   })
   srv.on("READ", LeaveRequests, async (req) => {
-     const userEmail = req.user.id           
-    const roles = req.user.roles || []
-    if (req.user.is("admin")) {
-      return await cds.run(req.query)
+    const data = await cds.run(req.query);
+    let array = Array.isArray(data) ? data : [data];
+    array.forEach(item => {
+    if(item.Status === 'Pending'){
+      item.Criticality = 2;
+    }else if(item.Status === 'Approved'){
+      item.Criticality = 3;
+    }else if(item.Status === 'Rejected'){
+      item.Criticality = 3;
     }
-    if (req.user.is("manager")) {
-      const manager = await cds.run(
-        SELECT.one.from(Users).where({ Email: userEmail })
-      )
-      if (!manager) return req.reject(403, "Manager not found")
-
-      const datas = await cds.run(
-        SELECT.from(LeaveRequests).where({ 'User.ManagerID_UserID': manager.UserID })
-      )
-      return datas;
-    }
-    const employee = await cds.run(
-      SELECT.one.from(Users).where({ Email: userEmail })
-    )
-    if (!employee) return req.reject(403, "User not found in Users")
-    const datasuser = await cds.run(
-      SELECT.from(LeaveRequests).where({ User_UserID: employee.UserID })
-    )
-    return datasuser;
+  });
+    return data;
+    
   })
      srv.before("READ", Users, async (req) => {
    const user = req.user.id;

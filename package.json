@@ -14,7 +14,8 @@
     "@cap-js/cds-types": "^0.7.0"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds-serve",
+    "watch-leavemp": "cds watch --open leavemp/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {
@@ -25,26 +26,35 @@
           "database": ":memory:"
         }
       },
-      "auth":{
+      "auth": {
         "kind": "mocked",
-        "users":{
+        "users": {
           "admin": {
-            "id":"admin@gmail.com",
+            "id": "admin@gmail.com",
             "password": "admin",
-            "roles": ["admin"]
+            "roles": [
+              "admin"
+            ]
           },
           "user": {
-            "id":"user@gmail.com",
+            "id": "user@gmail.com",
             "password": "user",
-            "roles": ["User"]
+            "roles": [
+              "User"
+            ]
           },
           "user2": {
-             "id":"user@gmail.com",
+            "id": "user@gmail.com",
             "password": "user2",
-            "roles": ["User"]
+            "roles": [
+              "User"
+            ]
           }
         }
       }
     }
-  }
+  },
+  "sapux": [
+    "app/leavemp"
+  ]
 }

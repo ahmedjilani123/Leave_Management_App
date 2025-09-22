@@ -1,9 +1,9 @@
 using {Leave_Management_App.db as db} from '../db/LMP_Schema';
 
 service LeaveManagementSrv @(requires:'authenticated-user') {
-
+@odata.draft.enabled
   @(restrict: [
-    { grant: ['READ','CREATE'], to: ['User'],where :'User.Email = $user' },
+    { grant: ['READ','CREATE','UPDATE'], to: ['User'],where :'User.Email = $user' },
     { grant: ['*'], to: ['admin'] },                                      
     { grant: ['READ','UPDATE'], to: ['manager'] } 
   ])
@@ -12,7 +12,7 @@ service LeaveManagementSrv @(requires:'authenticated-user') {
   @(restrict: [
     { grant: ['*'], to: ['admin'] },                                       
     { grant: ['READ','UPDATE'], to: ['User'] }, 
-    { grant: ['READ'], to: ['manager'] }                                  
+    { grant: ['READ','UPDATE'], to: ['manager'] }                                  
   ])
   entity Users as projection on db.User_Data;
 
@@ -51,7 +51,7 @@ annotate LeaveManagementSrv.LeaveRequests with @(
         {
             $Type : 'UI.DataField',
             Value : Status,
-            Criticality:1
+            Criticality:Criticality
         }
       ]
   }
