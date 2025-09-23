@@ -33,8 +33,6 @@ entity User_Data : managed {
         Notes            : String(512);
         LeaveRequests    : Association to many LeaveRequest
                                on LeaveRequests.User = $self;
-        UserImage        : Association to Attachment;
-
 }
 
 entity LeaveRequest : managed {
@@ -46,11 +44,11 @@ entity LeaveRequest : managed {
             Reason          : String(256);
             Status          : LeaveStatus;
     virtual Criticality     : Integer;  //1,2,3
-            AppliedOn       : DateTime;
+            AppliedOn       : Date;
             ApprovedBy      : Association to User_Data;
-            ApprovedOn      : DateTime;
+            ApprovedOn      : Date;
             Comments        : String(256);
-            AttachmentURL   : String(256);
+          
             IsHalfDay       : Boolean;
             HalfDayType     : HalfDayOption;
             TotalDays       : Decimal(5, 2);
@@ -58,9 +56,4 @@ entity LeaveRequest : managed {
             User            : Association to User_Data;
 }
 
-entity Attachment {
-    key ID       : UUID;
-        Content  : LargeBinary  @Core.MediaType: FileType  @Core.ContentDisposition.Filename: FileName;
-        FileName : String(256);
-        FileType : String(50)   @Core.IsMediaType;
-}
+
