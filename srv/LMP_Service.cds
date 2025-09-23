@@ -1,27 +1,69 @@
 using {Leave_Management_App.db as db} from '../db/LMP_Schema';
 
 service LeaveManagementSrv @(requires:'authenticated-user') {
-@odata.draft.enabled
-  @(restrict: [
+ @odata.draft.enabled
+
+  entity LeaveRequests  @(restrict: [
     { grant: ['READ','CREATE','UPDATE'], to: ['User'],where :'User.Email = $user' },
     { grant: ['*'], to: ['admin'] },                                      
     { grant: ['READ','UPDATE'], to: ['manager'] } 
-  ])
-  entity LeaveRequests as projection on db.LeaveRequest;
+  ]) as projection on db.LeaveRequest
+  actions{
+    action approveLeaveRequest(Comments:String) returns LeaveRequests;
+   action rejectLeaveRequest() returns String;
+  };
 
-  @(restrict: [
-    { grant: ['*'], to: ['admin'] },                                       
-    { grant: ['READ','UPDATE'], to: ['User'] }, 
+@odata.draft.enabled
+  entity Users @(restrict: [
+    { grant: ['READ','CREATE','UPDATE','DELETE'], to: ['admin'] },                                       
+    { grant: ['READ','UPDATE'], to: ['User'] ,where :'User.Email = $user'}, 
     { grant: ['READ','UPDATE'], to: ['manager'] }                                  
-  ])
-  entity Users as projection on db.User_Data;
+  ]) as projection on db.User_Data;
 
 }
 
 annotate LeaveManagementSrv.LeaveRequests with @(
   UI:{
     SelectionFields  : [
-        User.@UserName, Status,LeaveType
+        User.UserName, Status,LeaveType
+    ],
+      LineItem  : [
+          {
+              $Type : 'UI.DataField',
+              @UI.Importance : #High,
+              
+              Value : UserName
+          },
+        {
+            $Type : 'UI.DataField',
+            @UI.Importance : #High,
+            Value : Reason,
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'LeaveManagementSrv.approveLeaveRequest',
+            Label : 'Approved',
+            Criticality : #Positive
+        },
+        {
+            $Type : 'UI.DataField',
+            @UI.Importance : #High,
+            Value : LeaveType,
+        },
+       
+        {
+            $Type : 'UI.DataField',
+            Value : Status,
+           @UI.Importance : #High,
+            Criticality:Criticality
+        }
+      ]
+  }
+) ;
+annotate LeaveManagementSrv.Users with @(
+  UI:{
+    SelectionFields  : [
+        UserName,Email
     ],
       LineItem  : [
           {
@@ -30,29 +72,21 @@ annotate LeaveManagementSrv.LeaveRequests with @(
           },
         {
             $Type : 'UI.DataField',
-            Value : Reason,
+            Value : Email,
         },
         {
             $Type : 'UI.DataField',
-            Value : LeaveType,
+            Value : FirstName,
         },
         {
             $Type : 'UI.DataField',
-            Value : TotalDays,
+            Value : LastName,
         },
         {
             $Type : 'UI.DataField',
-            Value : StartDate,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : EndDate,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : Status,
-            Criticality:Criticality
+            Value : Role,
         }
       ]
   }
 ) ;
+
