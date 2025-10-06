@@ -34,6 +34,10 @@ entity User_Data : managed {
         LeaveRequests    : Association to many LeaveRequest
                                on LeaveRequests.User = $self;
 }
+entity StatusM{
+    key StatusID : Integer;
+        Status:LeaveStatus;
+}
 
 entity LeaveRequest : managed {
     key     LeaveID         : UUID;
