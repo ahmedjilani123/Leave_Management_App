@@ -84,7 +84,9 @@ annotate LeaveManagementSrv.LeaveRequests with @(UI: {
       $Type      : 'UI.DataFieldForAction',
       Action     : 'LeaveManagementSrv.approveLeaveRequest',
       Label      : 'Approved',
-      Criticality: #Positive
+      Inline : true,
+      @UI.Importance: #High
+
     },
     {
       $Type         : 'UI.DataField',
